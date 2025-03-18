@@ -1,36 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putchar.c                                       :+:      :+:    :+:   */
+/*   prtunsigint.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxi <wxi@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: a12708 <a12708@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:43:01 by wxi               #+#    #+#             */
-/*   Updated: 2024/06/07 23:17:25 by wxi              ###   ########.fr       */
+/*   Updated: 2025/01/19 23:24:30 by a12708           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	del(void *content)
+static int	unsigcount(unsigned int n)
 {
-	free(content);
+	unsigned int	temp;
+	int				i;
+
+	i = 1;
+	temp = n;
+	while (temp >= 10)
+	{
+		temp = temp / 10;
+		i++;
+	}
+	return (i);
 }
 
-void	ft_lstclear(t_list **lst, void (*del)(void*))
+int	prtunsigint(unsigned int n)
 {
-	t_list	*current;
-	t_list	*next;
+	int		i;
+	char	c;
 
-	if (!lst || !*lst || !del)
-		return ;
-	current = *lst;
-	while (current)
-	{
-		next = current->next;
-		del(current->content);
-		free (current);
-		current = next;
-	}
-	*lst = NULL;
+	i = unsigcount(n);
+	if (n >= 10)
+		prtunsigint(n / 10);
+	c = n % 10 + '0';
+	write (1, &c, 1);
+	return (i);
 }

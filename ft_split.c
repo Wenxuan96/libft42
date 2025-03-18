@@ -91,11 +91,11 @@ char	**ft_split(char const *s, char c)
 
 // int	main(void)
 // {	
-// 	char	tabstr[] = "aaaaaaaaaaaaaaaa";
+// 	char	tabstr[] = "aaaaaaaaa aaaaaaa";
 // 	char **splitstrs;
 // 	int		i;
 // 	i = 0;
-// 	splitstrs = ft_split(tabstr, 'a');
+// 	splitstrs = ft_split(tabstr, ' ');
 // 	while (splitstrs[i])
 // 	{
 // 		printf("%p: %s\n", &splitstrs[i], splitstrs[i]);

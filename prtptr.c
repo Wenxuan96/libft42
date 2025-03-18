@@ -12,47 +12,46 @@
 
 #include "libft.h"
 
-static int	skipempty(const char *nptr)
+static int	ptrhexlow(uintptr_t n)
 {
-	int	i;
+	char	hexn;
 
-	i = 0;
-	while (nptr[i] == ' ' || nptr[i] == '\t' || nptr[i] == '\n'
-		|| nptr[i] == '\v' || nptr[i] == '\f' || nptr[i] == '\r')
+	if (9 < n && n <= 16)
+		hexn = 'a' + (n - 10);
+	else
+		hexn = n + '0';
+	return (hexn);
+}
+
+static int	prtptrlow(uintptr_t n)
+{
+	char			c;
+	unsigned int	i;
+	uintptr_t		temp;
+
+	temp = n;
+	i = 1;
+	while (temp >= 16)
+	{
+		temp = temp / 16;
 		i++;
+	}
+	c = ptrhexlow(n % 16);
+	if (n >= 16)
+		prtptrlow (n / 16);
+	write (1, &c, 1);
 	return (i);
 }
 
-int	ft_atoi(const char *nptr)
+int	prtptr(void *ptr)
 {
-	int		i;
-	long	r;
-	int		sign;
+	uintptr_t	n;
+	int			i;
 
-	r = 0;
-	sign = 1;
-	i = skipempty(nptr);
-	if (nptr[i] == '-' && nptr[i + 1] != '+')
-	{
-		sign = -1;
-		i++;
-	}
-	else if (nptr[i] == '+' && nptr[i + 1] != '-')
-		i++;
-	while (nptr[i] >= '0' && nptr[i] <= '9')
-	{
-		r = r * 10 + (nptr[i] - '0');
-		i++;
-		if (r * sign > INT_MAX)
-			return (INT_MAX);
-		if (r * sign < INT_MIN)
-			return (INT_MIN);
-	}
-	return (r * sign);
+	n = (uintptr_t)ptr;
+	if (n == 0)
+		return (write(1, "(nil)", 5));
+	write(1, "0x", 2);
+	i = prtptrlow(n);
+	return (i + 2);
 }
-
-// int	main(void)
-// {
-// 	printf("Converted number: %d\n", ft_atoi("   -12345xyz"));
-// 	return (0);
-// }

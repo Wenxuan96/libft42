@@ -12,47 +12,59 @@
 
 #include "libft.h"
 
-static int	skipempty(const char *nptr)
+static int	convert(va_list *args, char c)
 {
 	int	i;
 
 	i = 0;
-	while (nptr[i] == ' ' || nptr[i] == '\t' || nptr[i] == '\n'
-		|| nptr[i] == '\v' || nptr[i] == '\f' || nptr[i] == '\r')
-		i++;
+	if (c == '%')
+		i += write(1, "%", 1);
+	else if (c == 'c')
+		i += prtchar(va_arg(*args, int));
+	else if (c == 's')
+		i += prtstr(va_arg(*args, char *));
+	else if (c == 'p')
+		i += prtptr(va_arg(*args, void *));
+	else if (c == 'i' || c == 'd')
+		i += prtint(va_arg(*args, int));
+	else if (c == 'u')
+		i += prtunsigint(va_arg(*args, unsigned int));
+	else if (c == 'x')
+		i += prthexlow(va_arg(*args, int));
+	else if (c == 'X')
+		i += prthexup(va_arg(*args, int));
+	else
+	{
+		i += write(1, "%", 1);
+		i += write(1, &c, 1);
+	}
 	return (i);
 }
 
-int	ft_atoi(const char *nptr)
+int	ft_printf(const char *format, ...)
 {
+	va_list	args;
 	int		i;
-	long	r;
-	int		sign;
+	int		size;
+	int		n;
 
-	r = 0;
-	sign = 1;
-	i = skipempty(nptr);
-	if (nptr[i] == '-' && nptr[i + 1] != '+')
+	i = 0;
+	size = 0;
+	va_start (args, format);
+	while (format[i])
 	{
-		sign = -1;
+		if (format[i] == '%')
+			n = convert(&args, format[++i]);
+		else
+			n = write(1, &format[i], 1);
+		if (n == -1)
+		{
+			va_end (args);
+			return (-1);
+		}
+		size += n;
 		i++;
 	}
-	else if (nptr[i] == '+' && nptr[i + 1] != '-')
-		i++;
-	while (nptr[i] >= '0' && nptr[i] <= '9')
-	{
-		r = r * 10 + (nptr[i] - '0');
-		i++;
-		if (r * sign > INT_MAX)
-			return (INT_MAX);
-		if (r * sign < INT_MIN)
-			return (INT_MIN);
-	}
-	return (r * sign);
+	va_end (args);
+	return (size);
 }
-
-// int	main(void)
-// {
-// 	printf("Converted number: %d\n", ft_atoi("   -12345xyz"));
-// 	return (0);
-// }

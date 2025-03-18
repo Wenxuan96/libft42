@@ -4,12 +4,12 @@ ft_isprint.c ft_itoa.c ft_memchr.c ft_memcmp.c ft_memcpy.c ft_memmove.c ft_memse
 ft_putchar_fd.c ft_putendl_fd.c ft_putnbr_fd.c ft_putstr_fd.c ft_split.c ft_strchr.c ft_strdup.c\
 ft_striteri.c ft_strjoin.c ft_strlcat.c ft_strlcpy.c ft_strlen.c ft_strmapi.c ft_strncmp.c\
 ft_strnstr.c ft_strrchr.c ft_strtrim.c ft_substr.c ft_tolower.c ft_toupper.c\
-
-BONUS := ft_lstadd_back.c ft_lstadd_front.c ft_lstclear.c ft_lstdelone.c ft_lstiter.c\
+ft_printf.c prtchar.c prthexlow.c prthexup.c prtint.c prtptr.c\
+prtstr.c prtunsigint.c get_next_line_bonus.c get_next_line_utils_bonus.c\
+ft_lstadd_back.c ft_lstadd_front.c ft_lstclear.c ft_lstdelone.c ft_lstiter.c\
 ft_lstlast.c ft_lstmap.c ft_lstnew.c ft_lstsize.c\
 
 OBJS := $(SRCS:%.c=%.o)
-BONUS_OBJS := $(BONUS:%.c=%.o)
 
 CFLAGS ?= -Wall -Wextra -Werror
 
@@ -20,10 +20,6 @@ all :$(NAME)
 $(NAME): $(OBJS)
 	ar rcs $@ $^
 
-
-bonus: $(OBJS) $(BONUS_OBJS)
-	ar rcs $(NAME) $^
-
 %.o: %.c
 	$(CC) $(CFLAGS) -c $^ -o $@
 
@@ -31,7 +27,7 @@ clean:
 	rm -f $(OBJS)
 
 fclean: clean
-	rm -f $(NAME) $(BONUS_OBJS)
+	rm -f $(NAME)
 
 re: fclean all
 
